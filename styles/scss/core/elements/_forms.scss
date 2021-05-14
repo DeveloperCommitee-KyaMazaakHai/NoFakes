@@ -487,6 +487,10 @@ textarea.form-input {
 	margin-top: $form-hint--margin;
 }
 
+.form-hint-left-align {
+	text-align: left;
+}
+
 @include media( '<=medium' ) {
 
 	.form-group-desktop {
