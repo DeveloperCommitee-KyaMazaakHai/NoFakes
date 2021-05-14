@@ -27,6 +27,9 @@ module.exports = (app) => {
     app.post('/api/messages', (req, res) => {
         var { ...ob } = req.body
         message = Message({...ob})
+        //call flask to get embeddings
+        //get the embedding values
+        //store it into message
         message.save((err, savedMessage)=> {
             if(err){
                 return res.status(200).json({

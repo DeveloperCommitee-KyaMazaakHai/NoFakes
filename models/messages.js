@@ -7,7 +7,8 @@ const MessageSchema = new schema({
 	uploadIP: {type: String, required: true},
 	uploadPhone: {type: String},
 	uploadEmail: {type: String},
-	hitIDs: {type: [String]}
+	hitIDs: {type: [String]},
+	embeddings: {type: [Double]}
 })
 
 module.exports = mongoose.model('Message', MessageSchema, 'Messages')
