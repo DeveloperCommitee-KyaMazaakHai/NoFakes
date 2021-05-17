@@ -8,7 +8,9 @@ const MessageSchema = new schema({
 	uploadPhone: {type: String},
 	uploadEmail: {type: String},
 	hitIDs: {type: [String]},
-	embeddings: {type: [Double]}
+	embeddings: {type: [Number]}
 })
+
+// MessageSchema.methods.find = function find()
 
 module.exports = mongoose.model('Message', MessageSchema, 'Messages')
