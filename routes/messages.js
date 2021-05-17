@@ -35,13 +35,13 @@ module.exports = (app) => {
                 firstMsg = existingMsgs[0]
                 if(firstMsg.uploadIP == message.uploadIP || (firstMsg.uploadEmail && firstMsg.uploadEmail == message.uploadEmail) || (firstMsg.uploadPhone && firstMsg.uploadPhone == message.uploadPhone) ){
                     return res.status(200).json({
-                        status: 200,
+                        status: 202,
                         message: "Err: User has already uploaded the same message"
                     })
                 }else{
                     if(await HitServices.didUserHit(message.uploadIP, message.uploadPhone, message.uploadEmail, firstMsg._id)){
                         return res.status(200).json({
-                            status: 401,
+                            status: 203,
                             message: "Error: Message exists and User has already hit"
                         })
                     }else{
@@ -50,7 +50,7 @@ module.exports = (app) => {
                         const savedHit = await HitServices.saveHit(hit)
                         const savedMessage = await MessageServices.updateMessage(firstMsg._id, savedHit._id,{})
                         return res.status(200).json({
-                            status: 200,
+                            status: 201,
                             message: "Message exists, created hit",
                             savedHit: savedHit,
                             savedMessage: savedMessage
