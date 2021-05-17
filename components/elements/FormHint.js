@@ -12,16 +12,12 @@ const defaultProps = {
   status: false
 }
 
-const FormHint = ({
-  children,
-  className,
-  status,
-  ...props
-}) => {
+const FormHint = ({ children, className, status, submission, ...props }) => {
 
   const classes = classNames(
     'form-hint',
     status && `text-color-${status}`,
+    submission && 'form-hint-left-align',
     className
   );
 

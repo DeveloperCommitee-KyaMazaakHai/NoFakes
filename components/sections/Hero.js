@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
 import ButtonGroup from '../elements/ButtonGroup';
 import Button from '../elements/Button';
-import Image from '../elements/Image';
-import Modal from '../elements/Modal';
 import Input from "../elements/Input";
 import FormLabel from "../elements/FormLabel";
 import Checkbox from "../elements/Checkbox";
-
-
+import FormHint from "../elements/FormHint";
 
 const propTypes = {
   ...SectionProps.types
@@ -23,11 +20,31 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                 ...props }) => {
 
   const [newSubmission, setNewSubmission] = useState(false);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [emailValidation, setEmailValidation] = useState(true);
+  const [messageValidation, setMessageValidation] = useState(true);
 
   const newSubmissionChecked = (event) => {
-    console.log("checked: " + event.target.checked);
     setNewSubmission(event.target.checked);
   }
+
+  const emailHandler = (event) => {
+    setEmail(event.target.value);
+  }
+
+  const messageHandler = (event) => {
+    setMessage(event.target.value);
+  }
+
+  const submitHandler = useCallback(async () => {
+    if (newSubmission && email === "") {
+      setEmailValidation(false);
+    } else if (message === "") {
+      setMessageValidation(false);
+    }
+  }, [newSubmission, email]);
 
   const outerClasses = classNames(
     'hero section center-content',
@@ -62,24 +79,42 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
               <div className="mt-32 mb-32 reveal-from-bottom" data-reveal-delay="400">
                 <div className="mb-16">
                   <Checkbox
-                      onChange={(event) => newSubmissionChecked(event)}
+                    onChange={(event) => newSubmissionChecked(event)}
                   >
                     New Submission
                   </Checkbox>
                 </div>
-                <div className="mb-32">
+                {newSubmission ? <div className="mt-32 mb-16">
+                  <Input
+                    placeholder="Please enter your email"
+                    type="email"
+                    value={email}
+                    onChange={emailHandler}
+                  />
+                  {emailValidation === false && email === "" ?
+                    <FormHint status="error" submission>Please enter email.</FormHint> : <div />
+                  }
+                </div> : <div />}
+                <div className="mt-32 mb-32">
                   <Input
                     placeholder="Please enter message"
                     type="textarea"
                     rows="5"
                     multiline
+                    value={message}
+                    onChange={messageHandler}
                   />
+                  {messageValidation === false && message === "" ?
+                      <FormHint status="error" submission>Please enter message.</FormHint> : <div />
+                  }
                 </div>
-                <ButtonGroup>
-                  <Button tag="a" color="primary" wideMobile>
-                    {newSubmission ? "SUBMIT" : "CHECK"}
-                  </Button>
-                </ButtonGroup>
+                <div className="mt-32">
+                  <ButtonGroup>
+                    <Button tag="a" color="primary" wideMobile onClick={submitHandler}>
+                      {newSubmission ? "SUBMIT" : "CHECK"}
+                    </Button>
+                  </ButtonGroup>
+                </div>
               </div>
             </div>
           </div>
