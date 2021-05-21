@@ -1,4 +1,5 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
 import ButtonGroup from '../elements/ButtonGroup';
@@ -6,6 +7,7 @@ import Button from '../elements/Button';
 import Input from "../elements/Input";
 import Checkbox from "../elements/Checkbox";
 import FormHint from "../elements/FormHint";
+import * as homeActions from "../../store/actions/Home";
 
 const propTypes = {
   ...SectionProps.types
@@ -26,6 +28,8 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   const [emailValidation, setEmailValidation] = useState(true);
   const [phoneValidation, setPhoneValidation] = useState(true);
   const [messageValidation, setMessageValidation] = useState(true);
+
+  const dispatch = new useDispatch();
 
   const newSubmissionChecked = (event) => {
     setNewSubmission(event.target.checked);
@@ -49,9 +53,14 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
     } else if (message === "") {
       setMessageValidation(false);
     } else {
-
+      const messageObj = {
+        msgContent: message,
+        uploadIP: "127.0.0.21",
+        uploadEmail: email,
+      }
+      dispatch(homeActions.saveMessage(messageObj));
     }
-  }, [newSubmission, email]);
+  }, [dispatch, newSubmission, email, phoneNumber, message]);
 
   const outerClasses = classNames(
     'hero section center-content',

@@ -1,9 +1,9 @@
 import React from 'react';
 import Home from '../views/Home';
-import Header from '../components/layout/Header'
-import Footer from '../components/layout/Footer'
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
-export default function Home1(props){
+export default function Home1 (props) {
   return(
     <React.StrictMode>
       <div style={{height:'100vh', display:'grid'}}>
@@ -13,7 +13,6 @@ export default function Home1(props){
           </main>
         <Footer />
       </div>
-        
     </React.StrictMode>
   )
 }
