@@ -1,7 +1,4 @@
 .hero {
-
-	
-
 	.section-inner {
 		padding-top: $hero--padding-t__mobile;
 		padding-bottom: $hero--padding-b__mobile;
@@ -24,6 +21,24 @@
 			align-items: center;
 			vertical-align: top;
 		}
+	}
+}
+
+.info-fields {
+	display: flex;
+	flex-direction: column;
+
+	@media screen and (min-width: 640px){
+		flex-direction: row;
+	}
+}
+
+.or-separator {
+	margin-top: 8px;
+	margin-bottom: 8px;
+
+	@media screen and (min-width: 640px){
+		margin: auto;
 	}
 }
 

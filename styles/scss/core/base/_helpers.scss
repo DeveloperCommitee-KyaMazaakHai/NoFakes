@@ -20,6 +20,20 @@
 	}
 }
 
+// Display
+.display-flex {
+	display: flex;
+}
+
+// Flex direction
+.flex-column {
+	flex-direction: column;
+}
+
+.flex-row {
+	flex-direction: row;
+}
+
 // Text alignment
 .ta-l {
   text-align: left;

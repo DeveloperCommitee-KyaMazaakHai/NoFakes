@@ -4,7 +4,6 @@ import { SectionProps } from '../../utils/SectionProps';
 import ButtonGroup from '../elements/ButtonGroup';
 import Button from '../elements/Button';
 import Input from "../elements/Input";
-import FormLabel from "../elements/FormLabel";
 import Checkbox from "../elements/Checkbox";
 import FormHint from "../elements/FormHint";
 
@@ -21,9 +20,11 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
 
   const [newSubmission, setNewSubmission] = useState(false);
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
 
   const [emailValidation, setEmailValidation] = useState(true);
+  const [phoneValidation, setPhoneValidation] = useState(true);
   const [messageValidation, setMessageValidation] = useState(true);
 
   const newSubmissionChecked = (event) => {
@@ -33,16 +34,22 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   const emailHandler = (event) => {
     setEmail(event.target.value);
   }
+  const phoneHandler = (event) => {
+    setPhoneNumber(event.target.value);
+  }
 
   const messageHandler = (event) => {
     setMessage(event.target.value);
   }
 
   const submitHandler = useCallback(async () => {
-    if (newSubmission && email === "") {
+    if (newSubmission && email === "" && phoneNumber === "") {
       setEmailValidation(false);
+      setPhoneValidation(false);
     } else if (message === "") {
       setMessageValidation(false);
+    } else {
+
     }
   }, [newSubmission, email]);
 
@@ -84,17 +91,33 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                     New Submission
                   </Checkbox>
                 </div>
-                {newSubmission ? <div className="mt-32 mb-16">
-                  <Input
-                    placeholder="Please enter your email"
-                    type="email"
-                    value={email}
-                    onChange={emailHandler}
-                  />
-                  {emailValidation === false && email === "" ?
-                    <FormHint status="error" submission>Please enter email.</FormHint> : <div />
-                  }
-                </div> : <div />}
+                {newSubmission ?
+                    <div>
+                      <div className="mt-32 mb-16 info-fields">
+                        <div>
+                          <Input
+                              placeholder="Enter your email"
+                              type="email"
+                              value={email}
+                              onChange={emailHandler}
+                          />
+                        </div>
+                        <div className="or-separator">
+                          or
+                        </div>
+                        <div>
+                          <Input
+                              placeholder="Enter your phone number"
+                              type="text"
+                              value={phoneNumber}
+                              onChange={phoneHandler}
+                          />
+                        </div>
+                      </div>
+                      {emailValidation === false && email === "" && phoneValidation === false && phoneNumber === "" ?
+                          <FormHint status="error" className="mt-0" submission>Please enter email or phone number.</FormHint> : <div />
+                      }
+                    </div> : <div />}
                 <div className="mt-32 mb-32">
                   <Input
                     placeholder="Please enter message"
