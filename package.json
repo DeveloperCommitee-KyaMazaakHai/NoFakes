@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "next build",
     "build": "next build",
     "start": "ENV=prod PORT=8080 node index.js",
-    "dev": "cross-env ENV=dev PORT=8080 nodemon index.js"
+    "dev": "python3 NLP/server.py & cross-env ENV=dev PORT=8080 nodemon index.js",
+    "stop": "kill $(lsof -t -i:5000)"
   },
   "author": "Vandit Jain",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "babel-plugin-wrap-in-js": "^1.1.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^5.0.0",
+    "child_process": "^1.0.2",
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
