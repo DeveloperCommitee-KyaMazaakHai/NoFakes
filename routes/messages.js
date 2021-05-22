@@ -116,4 +116,29 @@ module.exports = (app) => {
             })
         }
     })
+
+    app.post('/api/calculateResult', async(req, res) => {
+        var {message} = req.body
+        try{
+            const result = await fetch('http://127.0.0.1:5000/computeDistance', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'message': message
+                })
+            })
+            const resultJSON = await result.json()
+            console.log("RESULT IN NODE: ", resultJSON)
+            return res.status(200).json({
+                status: 200,
+                message: "Calculated Result Successfully",
+                result: resultJSON
+            })
+        }catch(err){
+            return res.status(200).json({
+                status: 400,
+                message: "Error: " + err
+            })
+        }
+    })
+
 }

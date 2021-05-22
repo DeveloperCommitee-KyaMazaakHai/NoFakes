@@ -1,7 +1,7 @@
 import json
 import heapq
 import numpy as np
-
+import requests as rq
 from numba import njit
 from numpy.linalg import norm
 from flask import Flask,request
@@ -11,6 +11,7 @@ from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/nofakes"
+getEmbeddingsURL = "http://127.0.0.1:5000/computeEmbedding"
 mongo = PyMongo(app)
 model = SentenceTransformer('bert-base-nli-mean-tokens')
 
@@ -71,6 +72,7 @@ def computeDistances(currentEmbedding,nNearest, cursor):
   
   ans = np.sum(weightedHits)/np.sum(normalisedHits)
   print("Fake probability: "+str(ans*100))
+  return str(ans*100)
 
 
 
@@ -85,7 +87,8 @@ def computeEmbedding():
 @app.route("/computeDistance",methods=["POST"])
 def computeFakeness():
   requestJson = request.get_json(force=True)
-  currentEmbedding = np.array(requestJson["currentEmbedding"])
+  message = requestJson["message"]
+  currentEmbedding = np.array(rq.post(url=getEmbeddingsURL,json={"message":message}).json())
   messagesCursor = mongo.db.Messages.find()
   # for msg in messagesCursor:
   #   print("msg: ", msg)
@@ -93,7 +96,9 @@ def computeFakeness():
   # databaseEmbeddings = np.asarray(requestJson["databaseEmbeddings"]) 
   # databaseHits = np.array(requestJson["databaseHits"])
   # databaseSentences = requestJson["databaseSentences"] # mongo.db.messages.find()
-  computeDistances(currentEmbedding,5, messagesCursor)
-  return "bruh"
+  result =  computeDistances(currentEmbedding,5, messagesCursor)
+  print("FINAL RESULT: ", result)
+  return result
+  
     
 app.run()
