@@ -1,4 +1,6 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
 import ButtonGroup from '../elements/ButtonGroup';
@@ -6,6 +8,10 @@ import Button from '../elements/Button';
 import Input from "../elements/Input";
 import Checkbox from "../elements/Checkbox";
 import FormHint from "../elements/FormHint";
+import * as homeActions from "../../store/actions/Home";
+import Loader from "react-loader-spinner";
+
+const publicIp = require('public-ip');
 
 const propTypes = {
   ...SectionProps.types
@@ -17,7 +23,8 @@ const defaultProps = {
 
 const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bottomDivider, hasBgColor, invertColor,
                 ...props }) => {
-
+  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const [newSubmission, setNewSubmission] = useState(false);
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -26,6 +33,8 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   const [emailValidation, setEmailValidation] = useState(true);
   const [phoneValidation, setPhoneValidation] = useState(true);
   const [messageValidation, setMessageValidation] = useState(true);
+
+  const dispatch = new useDispatch();
 
   const newSubmissionChecked = (event) => {
     setNewSubmission(event.target.checked);
@@ -49,9 +58,18 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
     } else if (message === "") {
       setMessageValidation(false);
     } else {
-
+      setIsLoading(true);
+      const messageObj = {
+        msgContent: message,
+        uploadIP: await publicIp.v4().toString(),
+        uploadEmail: email,
+      }
+      dispatch(homeActions.saveMessage(messageObj)).then(() => {
+        setIsLoading(false);
+        history.push("/confirmation");
+      });
     }
-  }, [newSubmission, email]);
+  }, [dispatch, newSubmission, email, phoneNumber, message]);
 
   const outerClasses = classNames(
     'hero section center-content',
@@ -67,6 +85,29 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
     topDivider && 'has-top-divider',
     bottomDivider && 'has-bottom-divider'
   );
+
+  if (isLoading) {
+    return (
+        <section
+            {...props}
+            className={outerClasses}
+        >
+          <div className="container-sm">
+            <div className={innerClasses}>
+              <div className="hero-content">
+                <Loader
+                  type="TailSpin"
+                  color="white"
+                  height={80}
+                  width={80}
+                />
+                <p className="mt-32">Your message is being processed...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+    )
+  }
 
   return (
     <section
@@ -122,8 +163,8 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                   <Input
                     placeholder="Please enter message"
                     type="textarea"
-                    rows="5"
-                    multiline
+                    rows={5}
+                    multiline="true"
                     value={message}
                     onChange={messageHandler}
                   />
