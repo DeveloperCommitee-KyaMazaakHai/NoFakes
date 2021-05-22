@@ -7,6 +7,7 @@ const shell = require('shelljs')
 const { isEmail } = require('validator')
 var bodyParser = require('body-parser')
 require('dotenv').config({path: `./.env.${process.env.ENV}`})
+const { exec } = require('child_process');
 
 const routes = {
     messages: require('./routes/messages'),
@@ -20,6 +21,21 @@ process.on('uncaughtException', function (err){
 process.on('unhandledRejection', function(reason, p){
     console.error('Unhandled Rejection: Promise:', p, 'Reason: ', reason)
 })
+
+process.on('SIGINT', function() {
+	// some other closing procedures go here
+	console.log("\nKilling Flask Server")
+	exec('kill $(lsof -t -i:5000)', (err, stdout, stderr) => {
+		if(err){
+			console.error("ERR: ", err)
+			return
+		}
+		console.log(stdout)
+		console.error(stderr)
+	})
+	console.log("Gracefully Shutting Down Node Server");
+	process.exit(1);
+  });
 
 process.env.ENV = process.env.ENV || 'prod'
 process.env.PORT = process.env.PORT || 8080

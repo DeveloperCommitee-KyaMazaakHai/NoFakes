@@ -59,6 +59,14 @@ module.exports = (app) => {
                 }
                 
             }else{
+                const embeddingsResponse = await fetch("http://127.0.0.1:5000/computeEmbedding", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        'message': message.msgContent
+                    })
+                })
+                const embeddings = await embeddingsResponse.json()
+                message["embeddings"] = await embeddings
                 const savedMessage = await MessageServices.saveMessage(message)
                 return res.status(200).json({
                     status: 200,
