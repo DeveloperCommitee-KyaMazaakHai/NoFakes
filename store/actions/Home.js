@@ -11,17 +11,11 @@ export const saveMessage = (messageObj) => async (dispatch) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "msgContent": messageObj.message,
+                "msgContent": messageObj.msgContent,
                 "uploadIP": messageObj.uploadIP,
                 "uploadEmail": messageObj.uploadEmail
             })
-        }).then((result) => {
-            if (result.ok) {
-                return result;
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
 
         if (!messageResponse?.ok) {
             throw new Error('Something went wrong!');
@@ -35,7 +29,7 @@ export const saveMessage = (messageObj) => async (dispatch) => {
         } else if (messageResponseData.status === 202 || messageResponseData.status === 203) {
             statusMessage = "You have already uploaded this message."
         } else if (messageResponseData.status === 400) {
-            statusMessage = "There was an error in recording your message. Please try again."
+            statusMessage = "There was an error in recording your message. Please try again." + messageResponseData.message
         }
 
         dispatch({
