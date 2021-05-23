@@ -42,7 +42,7 @@ const ConfirmationView = ({ className, ...props }) => {
     );
 }
 
-ConfirmationView.propTypes = propTypes;
-ConfirmationView.defaultProps = defaultProps;
+// ConfirmationView.propTypes = propTypes;
+// ConfirmationView.defaultProps = defaultProps;
 
 export default ConfirmationView;

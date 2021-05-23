@@ -28,24 +28,19 @@ export const saveMessage = (messageObj) => async (dispatch) => {
         }
 
         const messageResponseData = await messageResponse.json();
-        console.log("message response data: " + JSON.stringify(messageResponseData));
-        let statusMessage = "Message successfully submitted";
+        let statusMessage = "";
 
-        // if (messageResponseData.status === 201) {
-        //
-        // } else if (messageResponseData.status === 202) {
-        //
-        // } else if (messageResponseData.status === 203) {
-        //
-        // } else if (messageResponseData.status === 200) {
-        //
-        // } else if (messageResponseData.status === 400) {
-        //
-        // }
+        if (messageResponseData.status === 200 || messageResponseData.status === 201) {
+            statusMessage = "Thank you for your contribution. We have recorder your message."
+        } else if (messageResponseData.status === 202 || messageResponseData.status === 203) {
+            statusMessage = "You have already uploaded this message."
+        } else if (messageResponseData.status === 400) {
+            statusMessage = "There was an error in recording your message. Please try again."
+        }
 
         dispatch({
             type: SAVE_MESSAGE,
-            project: statusMessage
+            messageSubmitResponse: statusMessage
         });
     } catch(err) {
         throw new Error(err.message);
