@@ -1,10 +1,10 @@
 import api from '../../config/api';
 
 export const SAVE_MESSAGE= 'SAVE_MESSAGE';
+export const CALCULATE_RESULT= 'CALCULATE_RESULT';
 
 export const saveMessage = (messageObj) => async (dispatch) => {
     try {
-        console.log("message obj: " + JSON.stringify(messageObj));
         const messageResponse = await fetch(`${api.messageUrl}`, {
             method: 'POST',
             headers: {
@@ -41,6 +41,46 @@ export const saveMessage = (messageObj) => async (dispatch) => {
         dispatch({
             type: SAVE_MESSAGE,
             messageSubmitResponse: statusMessage
+        });
+    } catch(err) {
+        throw new Error(err.message);
+    }
+};
+
+export const calculateResult = (message) => async (dispatch) => {
+    try {
+        const resultResponse = await fetch(`${api.resultUrl}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "message": message,
+            })
+        }).then((result) => {
+            if (result.ok) {
+                return result;
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+
+        if (!resultResponse?.ok) {
+            throw new Error('Something went wrong!');
+        }
+
+        const resultResponseData = await resultResponse.json();
+        let resultMessage = "";
+
+        if (resultResponseData.status === 200) {
+            resultMessage = resultResponseData.result;
+        } else if (resultResponseData.status === 400) {
+            resultMessage = "There was an error in calculating the result. Please try again."
+        }
+
+        dispatch({
+            type: CALCULATE_RESULT,
+            calculateResultResponse: resultMessage
         });
     } catch(err) {
         throw new Error(err.message);

@@ -64,9 +64,13 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
         uploadIP: await publicIp.v4().toString(),
         uploadEmail: email,
       }
-      dispatch(homeActions.saveMessage(messageObj)).then(() => {
+      dispatch(newSubmission ? homeActions.saveMessage(messageObj)
+      : homeActions.calculateResult(message)).then(() => {
         setIsLoading(false);
-        Router.push("/confirmation");
+        Router.push({
+          pathname: '/confirmation',
+          query: { newSubmission: newSubmission },
+        });
       });
     }
   }, [dispatch, newSubmission, email, phoneNumber, message]);
