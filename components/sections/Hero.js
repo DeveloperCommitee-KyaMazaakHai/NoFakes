@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
@@ -10,6 +9,7 @@ import Checkbox from "../elements/Checkbox";
 import FormHint from "../elements/FormHint";
 import * as homeActions from "../../store/actions/Home";
 import Loader from "react-loader-spinner";
+import Router from 'next/router'
 
 const publicIp = require('public-ip');
 
@@ -23,7 +23,7 @@ const defaultProps = {
 
 const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bottomDivider, hasBgColor, invertColor,
                 ...props }) => {
-  const history = useHistory();
+
   const [isLoading, setIsLoading] = useState(false);
   const [newSubmission, setNewSubmission] = useState(false);
   const [email, setEmail] = useState("");
@@ -64,9 +64,13 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
         uploadIP: await publicIp.v4().toString(),
         uploadEmail: email,
       }
-      dispatch(homeActions.saveMessage(messageObj)).then(() => {
+      dispatch(newSubmission ? homeActions.saveMessage(messageObj)
+      : homeActions.calculateResult(message)).then(() => {
         setIsLoading(false);
-        history.push("/confirmation");
+        Router.push({
+          pathname: '/confirmation',
+          query: { newSubmission: newSubmission },
+        });
       });
     }
   }, [dispatch, newSubmission, email, phoneNumber, message]);

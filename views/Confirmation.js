@@ -1,18 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/router'
 import { useSelector } from "react-redux";
 import classNames from 'classnames';
-import { SectionProps } from '../utils/SectionProps';
-
-const propTypes = {
-    ...SectionProps.types
-}
-
-const defaultProps = {
-    ...SectionProps.defaults
-}
 
 const ConfirmationView = ({ className, ...props }) => {
-    const response = useSelector((state) => state.home.messageSubmitInfo);
+    const router = useRouter();
+    const newSubmission = router.query.newSubmission;
+    const response = useSelector((state) =>
+        newSubmission ? state.home.messageSubmitInfo : state.home.calculateResultInfo);
     const outerClasses = classNames(
         'hero section center-content',
         className
@@ -41,8 +36,5 @@ const ConfirmationView = ({ className, ...props }) => {
         </section>
     );
 }
-
-ConfirmationView.propTypes = propTypes;
-ConfirmationView.defaultProps = defaultProps;
 
 export default ConfirmationView;

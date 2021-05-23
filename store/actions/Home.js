@@ -1,10 +1,10 @@
 import api from '../../config/api';
 
 export const SAVE_MESSAGE= 'SAVE_MESSAGE';
+export const CALCULATE_RESULT= 'CALCULATE_RESULT';
 
 export const saveMessage = (messageObj) => async (dispatch) => {
     try {
-        console.log("message obj: " + JSON.stringify(messageObj));
         const messageResponse = await fetch(`${api.messageUrl}`, {
             method: 'POST',
             headers: {
@@ -28,24 +28,59 @@ export const saveMessage = (messageObj) => async (dispatch) => {
         }
 
         const messageResponseData = await messageResponse.json();
-        console.log("message response data: " + JSON.stringify(messageResponseData));
-        let statusMessage = "Message successfully submitted";
+        let statusMessage = "";
 
-        // if (messageResponseData.status === 201) {
-        //
-        // } else if (messageResponseData.status === 202) {
-        //
-        // } else if (messageResponseData.status === 203) {
-        //
-        // } else if (messageResponseData.status === 200) {
-        //
-        // } else if (messageResponseData.status === 400) {
-        //
-        // }
+        if (messageResponseData.status === 200 || messageResponseData.status === 201) {
+            statusMessage = "Thank you for your contribution. We have recorder your message."
+        } else if (messageResponseData.status === 202 || messageResponseData.status === 203) {
+            statusMessage = "You have already uploaded this message."
+        } else if (messageResponseData.status === 400) {
+            statusMessage = "There was an error in recording your message. Please try again."
+        }
 
         dispatch({
             type: SAVE_MESSAGE,
-            project: statusMessage
+            messageSubmitResponse: statusMessage
+        });
+    } catch(err) {
+        throw new Error(err.message);
+    }
+};
+
+export const calculateResult = (message) => async (dispatch) => {
+    try {
+        const resultResponse = await fetch(`${api.resultUrl}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "message": message,
+            })
+        }).then((result) => {
+            if (result.ok) {
+                return result;
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+
+        if (!resultResponse?.ok) {
+            throw new Error('Something went wrong!');
+        }
+
+        const resultResponseData = await resultResponse.json();
+        let resultMessage = "";
+
+        if (resultResponseData.status === 200) {
+            resultMessage = resultResponseData.result;
+        } else if (resultResponseData.status === 400) {
+            resultMessage = "There was an error in calculating the result. Please try again."
+        }
+
+        dispatch({
+            type: CALCULATE_RESULT,
+            calculateResultResponse: resultMessage
         });
     } catch(err) {
         throw new Error(err.message);
