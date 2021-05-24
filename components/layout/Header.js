@@ -113,7 +113,14 @@ const Header = ({ className, navPosition, hideNav, hideSignin, bottomOuterDivide
                       className="list-reset header-nav-right"
                     >
                       <li>
-                        <Button className="button button-primary button-wide-mobile button-sm" onClick={closeMenu}>About Us</Button>
+                        <Button
+                            className="button button-primary button-wide-mobile button-sm"
+                            onClick={closeMenu}
+                        >
+                          <a href="https://codeuino.com" target="_blank" style={{ padding: 0, color: "#ECEDED" }}>
+                            About Us
+                          </a>
+                        </Button>
                       </li>
                     </ul>}
                 </div>

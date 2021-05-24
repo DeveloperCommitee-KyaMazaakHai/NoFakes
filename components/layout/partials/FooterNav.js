@@ -19,10 +19,10 @@ const FooterNav = ({
     >
       <ul className="list-reset">
         <li>
-          <a href="https://codeuino.com#contact-us">Contact</a>
+          <a href="https://codeuino.com#contact-us" target="_blank">Contact</a>
         </li>
         <li>
-          <a href="https://codeuino.com">About us</a>
+          <a href="https://codeuino.com" target="_blank">About us</a>
         </li>
         {/*<li>*/}
         {/*  <a href="#0">FAQ's</a>*/}
