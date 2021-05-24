@@ -7,7 +7,8 @@ const ConfirmationView = ({ className, ...props }) => {
     const router = useRouter();
     const newSubmission = router.query.newSubmission;
     const response = useSelector((state) =>
-        newSubmission ? state.home.messageSubmitInfo : state.home.calculateResultInfo);
+        newSubmission === "true" ? state.home.messageSubmitInfo : state.home.calculateResultInfo);
+    console.log("response: ", response)
     const outerClasses = classNames(
         'hero section center-content',
         className

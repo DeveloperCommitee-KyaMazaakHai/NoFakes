@@ -51,13 +51,7 @@ export const calculateResult = (message) => async (dispatch) => {
             body: JSON.stringify({
                 "message": message,
             })
-        }).then((result) => {
-            if (result.ok) {
-                return result;
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
 
         if (!resultResponse?.ok) {
             throw new Error('Something went wrong!');
@@ -67,10 +61,11 @@ export const calculateResult = (message) => async (dispatch) => {
         let resultMessage = "";
 
         if (resultResponseData.status === 200) {
-            resultMessage = resultResponseData.result;
+            resultMessage = `${resultResponseData.result}`; 
         } else if (resultResponseData.status === 400) {
             resultMessage = "There was an error in calculating the result. Please try again."
         }
+
 
         dispatch({
             type: CALCULATE_RESULT,
