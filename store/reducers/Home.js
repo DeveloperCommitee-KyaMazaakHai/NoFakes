@@ -5,7 +5,8 @@ const initialState = {
     calculateResultInfo: null
 }
 
-export default (state = initialState, { type, messageSubmitResponse, calculateResultResponse }) => {
+export default (state = initialState, { type,
+    messageSubmitResponse, calculateResultResponse }) => {
     switch (type) {
         case SAVE_MESSAGE:
             return {

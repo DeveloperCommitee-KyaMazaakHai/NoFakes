@@ -104,9 +104,9 @@ const Header = ({ className, navPosition, hideNav, hideSignin, bottomOuterDivide
                       'list-reset text-xs',
                       navPosition && `header-nav-${navPosition}`
                     )}>
-                    <li>
-                      <a>Documentation</a>
-                    </li>
+                    {/*<li>*/}
+                    {/*  <a>Documentation</a>*/}
+                    {/*</li>*/}
                   </ul>
                   {!hideSignin &&
                     <ul

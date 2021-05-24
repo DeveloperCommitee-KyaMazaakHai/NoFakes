@@ -29,7 +29,7 @@ export const saveMessage = (messageObj) => async (dispatch) => {
         } else if (messageResponseData.status === 202 || messageResponseData.status === 203) {
             statusMessage = "You have already uploaded this message."
         } else if (messageResponseData.status === 400) {
-            statusMessage = "There was an error in recording your message. Please try again." + messageResponseData.message
+            statusMessage = "There was an error in recording your message. Please try again. " + messageResponseData.message
         }
 
         dispatch({
@@ -65,7 +65,6 @@ export const calculateResult = (message) => async (dispatch) => {
         } else if (resultResponseData.status === 400) {
             resultMessage = "There was an error in calculating the result. Please try again."
         }
-
 
         dispatch({
             type: CALCULATE_RESULT,

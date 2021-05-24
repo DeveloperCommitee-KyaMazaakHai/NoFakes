@@ -8,7 +8,6 @@ const ConfirmationView = ({ className, ...props }) => {
     const newSubmission = router.query.newSubmission;
     const response = useSelector((state) =>
         newSubmission === "true" ? state.home.messageSubmitInfo : state.home.calculateResultInfo);
-    console.log("response: ", response)
     const outerClasses = classNames(
         'hero section center-content',
         className
@@ -26,7 +25,7 @@ const ConfirmationView = ({ className, ...props }) => {
             <div className="container-sm">
                 <div className={innerClasses}>
                     <div className="hero-content">
-                        <div className="container-xs">
+                        <div className="container-xs" style={{ color: "white" }}>
                             <p>
                                 {response === null ? "" : response}
                             </p>

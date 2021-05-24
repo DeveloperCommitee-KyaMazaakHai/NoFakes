@@ -19,17 +19,17 @@ const FooterNav = ({
     >
       <ul className="list-reset">
         <li>
-          <a href="#0">Contact</a>
+          <a href="https://codeuino.com#contact-us">Contact</a>
         </li>
         <li>
-          <a href="#0">About us</a>
+          <a href="https://codeuino.com">About us</a>
         </li>
-        <li>
-          <a href="#0">FAQ's</a>
-        </li>
-        <li>
-          <a href="#0">Support</a>
-        </li>
+        {/*<li>*/}
+        {/*  <a href="#0">FAQ's</a>*/}
+        {/*</li>*/}
+        {/*<li>*/}
+        {/*  <a href="#0">Support</a>*/}
+        {/*</li>*/}
       </ul>
     </nav>
   );
