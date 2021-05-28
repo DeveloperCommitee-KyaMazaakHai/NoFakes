@@ -163,6 +163,12 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                                 Please enter a valid email.
                               </FormHint> : <div />
                           }
+                          {emailValidation === false && email === ""
+                          && phoneValidation === false && mobileNumber === "" ?
+                              <FormHint status="error" className="mt-0" submission>
+                                Please enter email or phone number.
+                              </FormHint> : <div />
+                          }
                         </div>
                         <div className="or-separator">
                           or
@@ -182,13 +188,6 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                           }
                         </div>
                       </div>
-
-                      {emailValidation === false && email === ""
-                      && phoneValidation === false && mobileNumber === "" ?
-                          <FormHint status="error" className="mt-0" submission>
-                            Please enter email or phone number.
-                          </FormHint> : <div />
-                      }
                     </div> : <div />}
                 <div className="mt-32 mb-32">
                   <Input
