@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import classNames from 'classnames';
 import { SectionProps } from '../../utils/SectionProps';
 import ButtonGroup from '../elements/ButtonGroup';
@@ -10,6 +10,7 @@ import FormHint from "../elements/FormHint";
 import * as homeActions from "../../store/actions/Home";
 import Loader from "react-loader-spinner";
 import Router from 'next/router'
+import FormLabel from "../elements/FormLabel";
 
 const publicIp = require('public-ip');
 
@@ -27,7 +28,7 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   const [isLoading, setIsLoading] = useState(false);
   const [newSubmission, setNewSubmission] = useState(false);
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [message, setMessage] = useState("");
 
   const [emailValidation, setEmailValidation] = useState(true);
@@ -36,6 +37,9 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
 
   const dispatch = new useDispatch();
 
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const mobileRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+
   const newSubmissionChecked = (event) => {
     setNewSubmission(event.target.checked);
   }
@@ -43,8 +47,8 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   const emailHandler = (event) => {
     setEmail(event.target.value);
   }
-  const phoneHandler = (event) => {
-    setPhoneNumber(event.target.value);
+  const mobileHandler = (event) => {
+    setMobileNumber(event.target.value);
   }
 
   const messageHandler = (event) => {
@@ -52,7 +56,13 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
   }
 
   const submitHandler = useCallback(async () => {
-    if (newSubmission && email === "" && phoneNumber === "") {
+    if (newSubmission && email !== "" && !emailRegex.test(email.toLowerCase())) {
+      setEmailValidation(false);
+    }
+    if (newSubmission && mobileNumber !== "" && !mobileNumber.match(mobileRegex)) {
+      setPhoneValidation(false);
+    }
+    if ((newSubmission && email === "" && mobileNumber === "")) {
       setEmailValidation(false);
       setPhoneValidation(false);
     } else if (message === "") {
@@ -66,14 +76,15 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
       }
       dispatch(newSubmission ? homeActions.saveMessage(messageObj)
       : homeActions.calculateResult(message)).then(() => {
-        setIsLoading(false);
         Router.push({
           pathname: '/confirmation',
           query: { newSubmission: newSubmission },
+        }).then(() => {
+          setIsLoading(false);
         });
       });
     }
-  }, [dispatch, newSubmission, email, phoneNumber, message]);
+  }, [dispatch, newSubmission, email, mobileNumber, message]);
 
   const outerClasses = classNames(
     'hero section center-content',
@@ -98,7 +109,7 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
         >
           <div className="container-sm">
             <div className={innerClasses}>
-              <div className="hero-content">
+              <div className="hero-content" style={{ color: "white" }}>
                 <Loader
                   type="TailSpin"
                   color="white"
@@ -139,29 +150,44 @@ const Hero = ({ className, topOuterDivider, bottomOuterDivider, topDivider, bott
                 {newSubmission ?
                     <div>
                       <div className="mt-32 mb-16 info-fields">
-                        <div>
+                        <div className="ta-l">
+                          <FormLabel>Email</FormLabel>
                           <Input
                               placeholder="Enter your email"
                               type="email"
                               value={email}
                               onChange={emailHandler}
                           />
+                          {emailValidation === false && email !== "" && !emailRegex.test(email.toLowerCase()) ?
+                              <FormHint status="error" submission>
+                                Please enter a valid email.
+                              </FormHint> : <div />
+                          }
+                          {emailValidation === false && email === ""
+                          && phoneValidation === false && mobileNumber === "" ?
+                              <FormHint status="error" className="mt-0" submission>
+                                Please enter email or phone number.
+                              </FormHint> : <div />
+                          }
                         </div>
                         <div className="or-separator">
                           or
                         </div>
-                        <div>
+                        <div className="ta-l">
+                          <FormLabel>Mobile Number</FormLabel>
                           <Input
-                              placeholder="Enter your phone number"
+                              placeholder="Enter your mobile number"
                               type="text"
-                              value={phoneNumber}
-                              onChange={phoneHandler}
+                              value={mobileNumber}
+                              onChange={mobileHandler}
                           />
+                          {phoneValidation === false && mobileNumber !== "" && !mobileNumber.match(mobileRegex) ?
+                              <FormHint status="error" submission>
+                                Please enter a valid mobile number.
+                              </FormHint> : <div />
+                          }
                         </div>
                       </div>
-                      {emailValidation === false && email === "" && phoneValidation === false && phoneNumber === "" ?
-                          <FormHint status="error" className="mt-0" submission>Please enter email or phone number.</FormHint> : <div />
-                      }
                     </div> : <div />}
                 <div className="mt-32 mb-32">
                   <Input

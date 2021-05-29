@@ -8,7 +8,8 @@ fieldset {
 .form-label,
 .form-switch,
 .form-slider {
-    color: color(label);
+    //color: color(label);
+	color: color(heading);
     @include font-weight(label);
 
 }

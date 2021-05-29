@@ -104,16 +104,23 @@ const Header = ({ className, navPosition, hideNav, hideSignin, bottomOuterDivide
                       'list-reset text-xs',
                       navPosition && `header-nav-${navPosition}`
                     )}>
-                    <li>
-                      <a>Documentation</a>
-                    </li>
+                    {/*<li>*/}
+                    {/*  <a>Documentation</a>*/}
+                    {/*</li>*/}
                   </ul>
                   {!hideSignin &&
                     <ul
                       className="list-reset header-nav-right"
                     >
                       <li>
-                        <Button className="button button-primary button-wide-mobile button-sm" onClick={closeMenu}>About Us</Button>
+                        <Button
+                            className="button button-primary button-wide-mobile button-sm"
+                            onClick={closeMenu}
+                        >
+                          <a href="https://codeuino.com" target="_blank" style={{ padding: 0, color: "#ECEDED" }}>
+                            About Us
+                          </a>
+                        </Button>
                       </li>
                     </ul>}
                 </div>
